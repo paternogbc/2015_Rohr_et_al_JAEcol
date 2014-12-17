@@ -1,4 +1,3 @@
-"x"
 "Hadromophryne_natalensis"
 "Heleophryne_purcelli"
 "Heleophryne_regis"
