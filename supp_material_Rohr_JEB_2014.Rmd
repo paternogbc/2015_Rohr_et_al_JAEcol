@@ -1,0 +1,196 @@
+
+---
+title: 'Supporting Information: Background Noise as a Selective Pressure: Anuran Species
+  from Lotic Environments Call at Higher Pitches'
+author: David Lucas Röhr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Juncá ; Adrian
+  A. Garda
+date: "December 17, 2014"
+output: pdf_document
+toc: true
+theme: "united"
+---
+
+This doccument follows the principles of [reproducible reserach](http://pakillo.github.io/Rmarkdown_talk_SevillaR_Nov2014/#/). All data and code required to repeat the analysis bellow will be available at [github](https://github.com/paternogbc/2014_Rohr_et_al_JEB)  
+
+1. Packages and Functions used:
+===============================
+```{r packages,message=FALSE}
+library(ape);library(caper);library(phytools);library(knitr)
+library(dplyr);library(ggplot2);library(picante)
+
+```
+```{r source functions,message=FALSE}
+# Function to calculate standard error: 
+stderr <- function(x) sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
+```
+
+```{r species data entry,echo=F,results='hide'}
+# Entrada de dados:
+mat <- read.table("raw.data_Rhor_JEB.txt",h=T)
+```
+```{r phylogeny data entry,echo=F,results='hide'}
+arvore<-read.tree("amph_2014.tre")
+anura<-drop.tip(arvore,as.character(mat[,1]))             
+filo<-(drop.tip(arvore,anura$tip.label))
+filo$node.label 
+filo$node.label <- makeLabel(filo)$node.label 
+comp.data <- comparative.data(phy=filo,data=mat,names.col="sp",vcv=T,vcv.dim=3)
+```
+
+2. Data structure:
+========
+A. Species data 
+---------------
+The species data contains six variables (see Methods and [raw data](https://gist.github.com/paternogbc/d73612e22c36e538ee54) for full acess and detailed information about data)
+  
+variable  | discription
+--------- | -----------
+sp        | species name
+environment| Reproductive environment (lentic or lotic)
+DF| Dominant frequency (hertz)
+SVL|snout vent length (mm)
+logDF| log10 of dominant frequency (DF)
+logSVL| log10 of snout vent length (SVL)
+
+###Species data structure
+```{r,echo=F}
+tail(mat)
+str(mat)
+```
+
+B. Phylogeny
+------------
+The phylogenetic tree used in this paper was pruned from: [Pyron and Wiens (2014)](http://www.sciencedirect.com/science/article/pii/S105579031100279X) anura super tree. The pruned tree with study species (509) is available at [github](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/phy_Rohr_JEB_2014.tre)  
+
+Phylogeny structure
+-------------------
+
+```{r,echo=F,fig.height=6}
+filo
+comp.data$data$sp <- comp.data$tip.label
+plot(comp.data[[1]],"fan",show.tip.label=T,cex=0.08,label.offset=1.2,
+     lab4ut="axial")
+tiplabels(frame="circle",col=comp.data$data$environment,
+          pch=c(16,16),cex=0.3)
+legend(legend=c("lotic","lentic"),pch=c(16,16),col=c("red","black"),
+       "topleft",bty="n")
+```
+
+3. Data summary:
+================
+
+A. Mean and standard deviation for Dominant frequency and Sout-vent-length
+--------------------------------------------------------------------------
+```{r data summery0,echo=F}
+kable(summarise(group_by(mat,environment),meanDF=mean(DF),seDF=sd(DF),
+                meanSVL=mean(SVL),seSVL=sd(SVL)))
+```
+
+B. Dominant frequency distribuion
+---------------------------------
+    
+```{r datasummary1, message=FALSE,warning=FALSE,echo=FALSE,fig.height=3,fig.width=5,error=FALSE}
+g1 <- ggplot(mat,aes(x=logDF,y=..density..,fill=environment))+
+geom_histogram(alpha=.5)+
+geom_density(alpha=0.3,size=0.5)+
+facet_grid(~environment)+
+xlab("Dominant Frequency (hertz)[log10]")+
+theme(legend.position = "none");g1
+```
+
+C. Snout Vent Length distribuion
+---------------------------------
+
+```{r datasummary2, message=FALSE,warning=FALSE,echo=FALSE,fig.height=3,fig.width=5,error=FALSE}
+g2 <- ggplot(mat,aes(x=logSVL,y=..density..,fill=environment))+
+geom_histogram(alpha=.5)+
+geom_density(alpha=0.3,size=0.5)+
+facet_grid(~environment)+
+xlab("Log10 Snout Vent Length (mm)[log10]")+
+theme(legend.position = "none");g2
+```
+
+4. Phylogenetic signal 
+======================
+We used K statistics to test the phylogentic signal for Dominant Frequency (*logDF*) and Snout-vent-length(*logSVL*)(for details about the method, see [Blomberg et al (2003)](http://onlinelibrary.wiley.com/doi/10.1111/j.0014-3820.2003.tb00285.x/abstract))
+
+```{r}
+k.signal <- multiPhylosignal(select(comp.data$data,logDF,logSVL),comp.data$phy,reps=999)
+kable(k.signal)
+```
+  
+Dominant Frequency and Snout-Vent-Length show significant phylogenetic signal, however, K values are low.  
+
+5. Phylogenetic generalized least square 
+========================================
+We used a phylogenetic generalized least square model (PGLS) with dominant frequency as the response variable and reproduction habitat (lentic/lotic) and SVL as the explanatory variables to test if dominant frequency was affected by reproduction environment. Dominant frequencies and body sizes were log transformed (log10) before the analysis. To optimize branch length transformation, the lambda value was set by maximum likelihood (see [Freckleton et al., 2002](http://www.jstor.org/stable/10.1086/343873); [Orme et al., 2013](http://cran.r-project.org/web/packages/caper/vignettes/caper.pdf) for details). PGLS analysis were performed with the function `pgls` from the package `caper`.
+
+A. Data preparation:
+--------------------
+Using the function `comparative.data` we combined our phylogenie with the species dataset
+```{r,echo=FALSE}
+comp.data <- comparative.data(phy=filo,data=mat,names.col="sp",vcv=T,vcv.dim=3)
+comp.data 
+```
+
+B. Data analysis:
+--------------------
+Fitting pgls model with with lambda adjusted by maximum likelihood:
+```{r}
+mod.pgls <- pgls(logDF ~ environment*logSVL, data=comp.data,lambda="ML")
+summary(mod.pgls)
+```
+
+**ANOVA table**
+```{r,echo=FALSE}
+kable(anova(mod.pgls))
+```
+
+Confidence interval for lambda estimation: 
+```{r,fig.height=4,fig.width=4}
+profile.lambda <- pgls.profile(mod.pgls)
+plot(profile.lambda)
+```
+
+C. Model diagnostic:
+--------------------
+
+1. Standard graphic methods for model diagnostics  
+
+```{r,echo=F}
+par(mfrow=c(2,2))
+plot(mod.pgls)
+```
+Residulas do not show any tendency. 
+
+2. Phylogenetic signal of model residuals
+-----------------------------------------
+After performing PGLS analysis it is important to check the phylogenetic signal of  model residuals ([reference](link))
+
+```{r,warning=FALSE,message=FALSE}
+k.residuals <- phylosignal(mod.pgls$phyres,reps=999,comp.data$phy)
+kable(k.residuals)
+```
+   
+Results above shows that the residuals do not present significant phylogenetic signal.
+
+6. References
+=============
+1. Pyron, R.A. & Wiens, J.J. 2011 A large-scale phylogeny of Amphibia including over 2800 species, and a revised classification of extant frogs, salamanders, and caecilians. Molecular Phylogenetics and Evolution 61, 543-583.  
+2. Blomberg, S. P., T. Garland, Jr., and A. R. Ives. 2003. Testing for phylogenetic signal in comparative data: behavioral traits are more labile. Evolution 57:717-745.  
+3. David Orme, Rob Freckleton, Gavin Thomas, Thomas Petzoldt, Susanne Fritz,
+  Nick Isaac and Will Pearse (2013). caper: Comparative Analyses of
+  Phylogenetics and Evolution in R. R package version 0.5.2.
+  http://CRAN.R-project.org/package=caper  
+
+
+7. Links summary:
+=================
+
+1. [raw data](https://gist.github.com/paternogbc/d73612e22c36e538ee54)    
+2.[source code](https://github.com/paternogbc/2014_Rohr_et_al_JEB)   
+3. [species list](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/species_list.csv)  
+4. [Study phylogeny](https://github.com/paternogbc/2014_Rohr_et_al_JEB)   
+5. [Sensitive analysis code]()  
+
+
