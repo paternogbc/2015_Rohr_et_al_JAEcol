@@ -10,18 +10,13 @@ toc: true
 theme: "united"
 ---
 
-This doccument follows the principles of [reproducible reserach](http://pakillo.github.io/Rmarkdown_talk_SevillaR_Nov2014/#/). All data and code required to repeat the analysis bellow will be available at [github](https://github.com/paternogbc/2014_Rohr_et_al_JEB)  
+This doccument follows the principles of [reproducible reserach](http://pakillo.github.io/Rmarkdown_talk_SevillaR_Nov2014/#/). All data and code required to repeat the analysis bellow are be available at: [raw data](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/raw.data_Rhor_JEB.txt) and [source code](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/Rhor_JEB_2014_source_code.R).
 
-1. Packages and Functions used:
+1. Packages used:
 ===============================
 ```{r packages,message=FALSE}
 library(ape);library(caper);library(phytools);library(knitr)
-library(dplyr);library(ggplot2);library(picante)
-
-```
-```{r source functions,message=FALSE}
-# Function to calculate standard error: 
-stderr <- function(x) sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
+library(dplyr);library(ggplot2);library(picante);library(gridExtra)
 ```
 
 ```{r species data entry,echo=F,results='hide'}
@@ -38,10 +33,11 @@ comp.data <- comparative.data(phy=filo,data=mat,names.col="sp",vcv=T,vcv.dim=3)
 ```
 
 2. Data structure:
-========
+=================
+
 A. Species data 
 ---------------
-The species data contains six variables (see Methods and [raw data](https://gist.github.com/paternogbc/d73612e22c36e538ee54) for full acess and detailed information about data)
+The species dataset contain six variables (see Methods for detailed information and [raw data](https://gist.github.com/paternogbc/d73612e22c36e538ee54) to download data.
   
 variable  | discription
 --------- | -----------
@@ -54,7 +50,7 @@ logSVL| log10 of snout vent length (SVL)
 
 ###Species data structure
 ```{r,echo=F}
-tail(mat)
+kable(tail(mat))
 str(mat)
 ```
 
@@ -82,37 +78,35 @@ legend(legend=c("lotic","lentic"),pch=c(16,16),col=c("red","black"),
 A. Mean and standard deviation for Dominant frequency and Sout-vent-length
 --------------------------------------------------------------------------
 ```{r data summery0,echo=F}
-kable(summarise(group_by(mat,environment),meanDF=mean(DF),seDF=sd(DF),
-                meanSVL=mean(SVL),seSVL=sd(SVL)))
+mat.summ <- summarise(group_by(mat,environment),meanDF=mean(DF),seDF=sd(DF),
+                meanSVL=mean(SVL),seSVL=sd(SVL))
+kable(mat.summ)
 ```
 
-B. Dominant frequency distribuion
----------------------------------
+B. Dominant Frequency and Snout-Vent-Length distribution
+--------------------------------------------------------
     
 ```{r datasummary1, message=FALSE,warning=FALSE,echo=FALSE,fig.height=3,fig.width=5,error=FALSE}
-g1 <- ggplot(mat,aes(x=logDF,y=..density..,fill=environment))+
-geom_histogram(alpha=.5)+
-geom_density(alpha=0.3,size=0.5)+
-facet_grid(~environment)+
+## DF:
+g1 <- ggplot(mat,aes(x=logDF,fill=environment))+
+geom_histogram(alpha=.5,position="identity")+
+geom_vline(data=data.frame(mat.summ),aes(xintercept=log10(meanDF),colour=environment),linetype="dashed", size=1)+
 xlab("Dominant Frequency (hertz)[log10]")+
-theme(legend.position = "none");g1
-```
+theme(legend.position = c(0.2,.8),
+      legend.background=element_rect("transparent"));g1
 
-C. Snout Vent Length distribuion
----------------------------------
-
-```{r datasummary2, message=FALSE,warning=FALSE,echo=FALSE,fig.height=3,fig.width=5,error=FALSE}
-g2 <- ggplot(mat,aes(x=logSVL,y=..density..,fill=environment))+
-geom_histogram(alpha=.5)+
-geom_density(alpha=0.3,size=0.5)+
-facet_grid(~environment)+
-xlab("Log10 Snout Vent Length (mm)[log10]")+
+## SVL:
+g2 <- ggplot(mat,aes(x=logSVL,fill=environment))+
+geom_histogram(alpha=.5,position="identity")+
+geom_vline(data=data.frame(mat.summ),aes(xintercept=log10(meanSVL),colour=environment),linetype="dashed", size=1)+
+xlab("Sount-vent-Length (mm)[log10]")+
 theme(legend.position = "none");g2
+grid.arrange(g1,g2,ncol=2)
 ```
 
 4. Phylogenetic signal 
 ======================
-We used K statistics to test the phylogentic signal for Dominant Frequency (*logDF*) and Snout-vent-length(*logSVL*)(for details about the method, see [Blomberg et al (2003)](http://onlinelibrary.wiley.com/doi/10.1111/j.0014-3820.2003.tb00285.x/abstract))
+We used K statistics to test the phylogentic signal for Dominant Frequency (*logDF*) and Snout-vent-length(*logSVL*)(for details about the method, see [Blomberg et al (2003)](http://onlinelibrary.wiley.com/doi/10.1111/j.0014-3820.2003.tb00285.x/abstract)). 
 
 ```{r}
 k.signal <- multiPhylosignal(select(comp.data$data,logDF,logSVL),comp.data$phy,reps=999)
@@ -171,8 +165,8 @@ After performing PGLS analysis it is important to check the phylogenetic signal 
 k.residuals <- phylosignal(mod.pgls$phyres,reps=999,comp.data$phy)
 kable(k.residuals)
 ```
-   
 Results above shows that the residuals do not present significant phylogenetic signal.
+
 
 6. References
 =============
@@ -191,6 +185,6 @@ Results above shows that the residuals do not present significant phylogenetic s
 2.[source code](https://github.com/paternogbc/2014_Rohr_et_al_JEB)   
 3. [species list](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/species_list.csv)  
 4. [Study phylogeny](https://github.com/paternogbc/2014_Rohr_et_al_JEB)   
-5. [Sensitive analysis code]()  
 
+***
 

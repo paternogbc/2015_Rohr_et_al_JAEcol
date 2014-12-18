@@ -10,21 +10,21 @@ library(dplyr);library(ggplot2);library(picante);library(reshape2)
 
 ```{r species data entry,echo=F,results='hide'}
 # Entrada de dados:
-mat <- read.table("raw.data_Rhor_JEB.txt",h=T)
+mat2 <- read.table("raw.data_Rhor_JEB.txt",h=T)
 ```
 
 ```{r phylogeny data entry,echo=F,results='hide'}
-mat <- read.csv("data_med_max.csv",h=T,sep=",")
-mat <- melt(mat, id.vars = c("sp", "DF"),
+mat2 <- read.csv("data_med_max.csv",h=T,sep=",")
+mat2 <- melt(mat2, id.vars = c("sp", "DF"),
           variable.name = "source", 
           value.name = "SVL")
 arvore<-read.tree("amph_2014.tre")
-anura<-drop.tip(arvore,as.character(mat[,1]))             
+anura<-drop.tip(arvore,as.character(mat2[,1]))             
 filo<-(drop.tip(arvore,anura$tip.label))
 filo$node.label 
 filo$node.label <- makeLabel(filo)$node.label 
-c_data_max <- comparative.data(phy=filo,data=filter(mat,source=="max"),names.col="sp",vcv=T,vcv.dim=3)
-c_data_med <- comparative.data(phy=filo,data=filter(mat,source=="med"),names.col="sp",vcv=T,vcv.dim=3)
+c_data_max <- comparative.data(phy=filo,data=filter(mat2,source=="max"),names.col="sp",vcv=T,vcv.dim=3)
+c_data_med <- comparative.data(phy=filo,data=filter(mat2,source=="med"),names.col="sp",vcv=T,vcv.dim=3)
 ```
 
 1. Min-Max Snout-Vent-Length comparison:
@@ -51,7 +51,7 @@ Os coeficientes são ligeiramente diferentes entre os dois modelos. No modelo co
 Regression Graphs:
 ------------------
 ```{r}
-g1 <- ggplot(mat,aes(y=log10(DF),x=log10(SVL),colour=source))+
+g1 <- ggplot(mat2,aes(y=log10(DF),x=log10(SVL),colour=source))+
           geom_point()+
           geom_smooth(method="lm",se=T);g1
 ```
