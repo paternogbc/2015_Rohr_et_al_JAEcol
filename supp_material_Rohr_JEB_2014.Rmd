@@ -9,8 +9,9 @@ output: pdf_document
 toc: true
 theme: "united"
 ---
+\newpage
 
-This doccument follows the principles of [reproducible reserach](http://pakillo.github.io/Rmarkdown_talk_SevillaR_Nov2014/#/). All data and code required to repeat the analysis bellow are be available at: [raw data](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/raw.data_Rhor_JEB.txt) and [source code](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/Rhor_JEB_2014_source_code.R).
+>This doccument follows the principles of [reproducible reserach](http://pakillo.github.io/Rmarkdown_talk_SevillaR_Nov2014/#/). All data and code required to repeat the analysis bellow are be available at: [raw data](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/raw.data_Rhor_JEB.txt) and [source code](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/Rhor_JEB_2014_source_code.R).
 
 1. Packages used:
 ===============================
@@ -32,10 +33,12 @@ filo$node.label <- makeLabel(filo)$node.label
 comp.data <- comparative.data(phy=filo,data=mat,names.col="sp",vcv=T,vcv.dim=3)
 ```
 
+\newpage
+
 2. Data structure:
 =================
 
-A. Species data 
+I. Species data 
 ---------------
 The species dataset contain six variables (see Methods for detailed information and [raw data](https://gist.github.com/paternogbc/d73612e22c36e538ee54) to download data.
   
@@ -48,15 +51,18 @@ SVL|snout vent length (mm)
 logDF| log10 of dominant frequency (DF)
 logSVL| log10 of snout vent length (SVL)
 
-###Species data structure
+Specis data structure
+---------------------  
+Last six rows of the species dataset:
+
 ```{r,echo=F}
 kable(tail(mat))
 str(mat)
 ```
 
-B. Phylogeny
+II. Phylogeny
 ------------
-The phylogenetic tree used in this paper was pruned from: [Pyron and Wiens (2014)](http://www.sciencedirect.com/science/article/pii/S105579031100279X) anura super tree. The pruned tree with study species (509) is available at [github](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/phy_Rohr_JEB_2014.tre)  
+The phylogenetic tree used in this paper was pruned from: [Pyron and Wiens (2014)](http://www.sciencedirect.com/science/article/pii/S105579031100279X) anura super tree. The pruned tree with study species (509) is available at: [study tree](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/phy_Rohr_JEB_2014.tre).  
 
 Phylogeny structure
 -------------------
@@ -68,9 +74,11 @@ plot(comp.data[[1]],"fan",show.tip.label=T,cex=0.08,label.offset=1.2,
      lab4ut="axial")
 tiplabels(frame="circle",col=comp.data$data$environment,
           pch=c(16,16),cex=0.3)
-legend(legend=c("lotic","lentic"),pch=c(16,16),col=c("red","black"),
+legend(legend=c("running","still"),pch=c(16,16),col=c("red","black"),
        "topleft",bty="n")
 ```
+
+\newpage
 
 3. Data summary:
 ================
@@ -86,23 +94,25 @@ kable(mat.summ)
 B. Dominant Frequency and Snout-Vent-Length distribution
 --------------------------------------------------------
     
-```{r datasummary1, message=FALSE,warning=FALSE,echo=FALSE,fig.height=3,fig.width=5,error=FALSE}
+```{r datasummary1, message=FALSE,warning=FALSE,echo=FALSE,fig.height=4,fig.width=6,error=FALSE}
 ## DF:
 g1 <- ggplot(mat,aes(x=logDF,fill=environment))+
 geom_histogram(alpha=.5,position="identity")+
 geom_vline(data=data.frame(mat.summ),aes(xintercept=log10(meanDF),colour=environment),linetype="dashed", size=1)+
 xlab("Dominant Frequency (hertz)[log10]")+
 theme(legend.position = c(0.2,.8),
-      legend.background=element_rect("transparent"));g1
+      legend.background=element_rect("transparent"))
 
 ## SVL:
 g2 <- ggplot(mat,aes(x=logSVL,fill=environment))+
 geom_histogram(alpha=.5,position="identity")+
 geom_vline(data=data.frame(mat.summ),aes(xintercept=log10(meanSVL),colour=environment),linetype="dashed", size=1)+
 xlab("Sount-vent-Length (mm)[log10]")+
-theme(legend.position = "none");g2
+theme(legend.position = "none")
 grid.arrange(g1,g2,ncol=2)
 ```
+
+\newpage
 
 4. Phylogenetic signal 
 ======================
@@ -127,6 +137,21 @@ comp.data <- comparative.data(phy=filo,data=mat,names.col="sp",vcv=T,vcv.dim=3)
 comp.data 
 ```
 
+A. Checking the phylogenetic signal of the residuals from stantard OLS regression
+---------------------------------------------------------------------------------
+In order to check the need to include the phylogeny in our analysis, first it is important to check if there is phylogenetic signal in the residuals of an Ordinary Least Square regression (OSL) (Kamilar & Cooper, 2013; Freckleton, 2009).
+
+Fitting OSL regression (formula = logDF ~ environment*logSVL):
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+mod.osl <- lm(logDF ~ environment*logSVL,mat)
+# Extracting residuals from the model:
+comp.data$data$lm.res <- residuals(mod.osl)
+osl.resi.sig <- phylosignal(comp.data$data$lm.res,reps=999,comp.data$phy)
+kable(osl.resi.sig)
+```
+
+Since the residuals from OSL regression show phylogenetic signal k = `r round(as.numeric(osl.resi.sig[1]),digits=2)`, there is strong need to correct for phylogenetic nonindependence in data.  
+
 B. Data analysis:
 --------------------
 Fitting pgls model with with lambda adjusted by maximum likelihood:
@@ -149,7 +174,7 @@ plot(profile.lambda)
 C. Model diagnostic:
 --------------------
 
-1. Standard graphic methods for model diagnostics  
+I. Standard graphic methods for model diagnostics   
 
 ```{r,echo=F}
 par(mfrow=c(2,2))
@@ -157,16 +182,26 @@ plot(mod.pgls)
 ```
 Residulas do not show any tendency. 
 
-2. Phylogenetic signal of model residuals
------------------------------------------
+II. Phylogenetic signal of model residuals  
 After performing PGLS analysis it is important to check the phylogenetic signal of  model residuals ([reference](link))
 
 ```{r,warning=FALSE,message=FALSE}
 k.residuals <- phylosignal(mod.pgls$phyres,reps=999,comp.data$phy)
 kable(k.residuals)
 ```
+  
 Results above shows that the residuals do not present significant phylogenetic signal.
 
+
+D. Model comparison: OSL vs PGLS
+--------------------
+```{r}
+kable(AIC(mod.osl,mod.pgls))
+```
+
+AIC comparison shows that PGLS model has much lower AIC value (`r AIC(mod.osl,mod.pgls)[2,2]`) then OSL model (`r AIC(mod.osl,mod.pgls)[1,2]`). Thus, PGLS model is a better fit for the data.  
+
+\newpage
 
 6. References
 =============
@@ -175,14 +210,17 @@ Results above shows that the residuals do not present significant phylogenetic s
 3. David Orme, Rob Freckleton, Gavin Thomas, Thomas Petzoldt, Susanne Fritz,
   Nick Isaac and Will Pearse (2013). caper: Comparative Analyses of
   Phylogenetics and Evolution in R. R package version 0.5.2.
-  http://CRAN.R-project.org/package=caper  
+  http://CRAN.R-project.org/package=caper   
+4. Kamilar JM, Cooper N. 2013 Phylogenetic signal in primate behaviour, ecology and life history. Phil Trans R Soc B 368: 20120341. http://dx.doi.org/10.1098/rstb.2012.0341
+5. Freckleton, R.P. (2009) The seven deadly sins of comparative analysis. J Evol Biol, 22, 1367-1375.  
 
+\newpage
 
 7. Links summary:
 =================
 
 1. [raw data](https://gist.github.com/paternogbc/d73612e22c36e538ee54)    
-2.[source code](https://github.com/paternogbc/2014_Rohr_et_al_JEB)   
+2. [source code](https://github.com/paternogbc/2014_Rohr_et_al_JEB)   
 3. [species list](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/species_list.csv)  
 4. [Study phylogeny](https://github.com/paternogbc/2014_Rohr_et_al_JEB)   
 
