@@ -1,5 +1,9 @@
 ---
-title: "Med and Max SVL comparsion"
+title: 'Cover letter: Background Noise as a Selective Pressure: Anuran Species
+  from Lotic Environments Call at Higher Pitches'
+author: David Lucas Röhr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Juncá ; Adrian
+  A. Garda
+date: "December 17, 2014"
 output: pdf_document
 ---
 
@@ -9,52 +13,24 @@ library(dplyr);library(ggplot2);library(picante);library(reshape2)
 ```
 
 ```{r species data entry,echo=F,results='hide'}
-# Entrada de dados:
-mat2 <- read.table("raw.data_Rhor_JEB.txt",h=T)
+# Entrada de dados: correlação entre SVL max, min and med
+mat2 <- read.table("data_med_max.csv",h=T,sep=",")
 ```
 
 
+2. Comment
+---------
+>_I am somewhat puzzled about why the authors chose the MEAN DF as the response variable, but chose the MAXIMUM SVL as one of their predictor variables. Perhaps they have scientific reasons for doing so, but I can’t think of any particularly good ones. I think good arguments could be made for basing their analyses on (i) the MINIMUM DF and the MAXIMUM SVL, or (ii) the MEAN DF and MEAN SVL, or (iii) the MAXIMUM DF and MINIMUM SVL. In fact, I think a much more rigorous and thorough analysis of the data would report results for all three of these analyses. Without reporting these additional analyses, the authors could mistakenly convey the impression that they have gone fishing for statistical significance to find a particular analysis that supports their a priori hypothesis. I would like to see results from all three of these analyses in any revision of this manuscript.  Unless something interesting is revealed in these new analyses (e.g., outcomes inconsistent with the authors’ favored hypothesis), this should not lengthen the manuscript by more than a few more lines in the tables already presented_
 
-```{r phylogeny data entry,echo=F,results='hide'}
-mat2 <- read.csv("data_med_max.csv",h=T,sep=",")
-mat2 <- melt(mat2, id.vars = c("sp", "DF"),
-          variable.name = "source", 
-          value.name = "SVL")
-arvore<-read.tree("amph_2014.tre")
-anura<-drop.tip(arvore,as.character(mat2[,1]))             
-filo<-(drop.tip(arvore,anura$tip.label))
-filo$node.label 
-filo$node.label <- makeLabel(filo)$node.label 
-c_data_max <- comparative.data(phy=filo,data=filter(mat2,source=="max"),names.col="sp",vcv=T,vcv.dim=3)
-c_data_med <- comparative.data(phy=filo,data=filter(mat2,source=="med"),names.col="sp",vcv=T,vcv.dim=3)
+__Answer:__
+In order to ensure that our choice of using mean Dominant Frequency (DF) and maximum Snout-vent-length (SVL) do not affect the main conclusions of the analysis:  
+
+1. We selected a random subsample of 30 species and recollected all data, including: mean, minimum and maximum values for DF and SVL.    
+2. Performed the Pearson correlation test between the mean, minimum and maximum values for DF and SVL (see results bellow).     
+
+Correlation tests: SVL (max,min,mean)
+```{r,echo=F,fig.height=3,fig.width=3}
+kable(cor(mat2[,2:3],method="pearson"))
 ```
 
-1. Min-Max Snout-Vent-Length comparison:
-
-Pgls regression (max SVL):
---------------
-```{r,results='hold'}
-mod_max <- pgls(log10(DF) ~log10(SVL),c_data_max,"ML")
-summary(mod_max)
-
-```
-
-Pgls regression (med SVL):
---------------
-```{r,results='hold'}
-mod_med <- pgls(log10(DF) ~log10(SVL),c_data_med,"ML")
-summary(mod_med)
-
-```
-
-Os coeficientes são ligeiramente diferentes entre os dois modelos. No modelo com tamanho corpóreo médio o ß é menor, ou seja, a frequência dominante decai mais rapidamente. O R2 do modelo com SVL_med é maior do que o com o max.
-
-
-Regression Graphs:
-------------------
-```{r}
-g1 <- ggplot(mat2,aes(y=log10(DF),x=log10(SVL),colour=source))+
-          geom_point()+
-          geom_smooth(method="lm",se=T);g1
-```
-
+Based on the high values of correlation (all above 0.9) we can afirm that it is very unlikiy that our choice can cause any change on the main results. Thus, we believe that our choice is well justified and that the maximum SVL can be used without any problem.
