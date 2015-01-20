@@ -1,7 +1,6 @@
 
 ---
-title: 'Supporting Information: Background Noise as a Selective Pressure: Anuran Species
-  from Lotic Environments Call at Higher Pitches'
+title: 'Supporting Information: Background Noise as a Selective Pressure: Stream-breeding Anurans  Call at Higher Frequencies'
 author: David Lucas R??hr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Junc?? ; Adrian
   A. Garda
 date: "December 17, 2014"
@@ -11,40 +10,33 @@ theme: "united"
 ---
 \newpage
 
->All Data and code required to repeat the analysis bellow are linked at: [raw data](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/raw.data_Rhor_JEB.txt), [source code](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/Rhor_JEB_2014_source_code.R) and ready to be executed. Thus this reserach reaches the gold standard of reprodibility for full replication (Peng, 2011). This documment was generated in __R studio__ with `kintr` package and all files and documentation are available at this [Github repo](link). 
+>All Data and code required to repeat the analysis bellow are linked at [Github](https://github.com/paternogbc/2014_Rohr_et_al_JEB) and the code is ready to be executed. Thus this reserach reaches the gold standard of reprodibility for full replication (Peng, 2011). This documment was generated in __R studio__ with `kintr` package.  
 
 1. Packages versions:
 ===============================
-install.packages("ape")
-```{r packages,message=FALSE,echo=FALSE}
+```{r info,message=FALSE,echo=F}
+info <- sessionInfo()
+```
+
+We used `r info[1]$R$ver` and the following packages:
+
+```{r packages,message=FALSE,echo=T}
 library(ape);library(caper);library(phytools);library(knitr)
 library(dplyr);library(ggplot2);library(picante);library(gridExtra)
 ```
 
-We used 'r info[1]$R$ver' and packages:
-```{r versions, echo=FALSE}
-info <- sessionInfo()
-info[1]$R$ver
-info$other
-str(info)
+For details about each package version, please check the `packrat` folder at the [Github](link).
 
-```
-
-info <- sessionInfo()
-info[1]$R$ver
-
-
-```{r species data entry,echo=F,results='hide'}
+```{r species data.entry,echo=F,results='hide'}
 # Entrada de dados:
-mat <- read.table("raw.data_Rhor_JEB.txt",h=T)
+anura.data <- read.table("data/raw.data_Rhor_JEB.txt",h=T)
 ```
 ```{r phylogeny data entry,echo=F,results='hide'}
-arvore<-read.tree("amph_2014.tre")
-anura<-drop.tip(arvore,as.character(mat[,1]))             
-filo<-(drop.tip(arvore,anura$tip.label))
-filo$node.label 
-filo$node.label <- makeLabel(filo)$node.label 
-comp.data <- comparative.data(phy=filo,data=mat,names.col="sp",vcv=T,vcv.dim=3)
+tree<-read.tree("phylogeny/amph_2014.tre")
+tree.crop<-drop.tip(tree,as.character(anura.data[,1]))             
+study.tree<-(drop.tip(tree,tree.crop$tip.label))
+study.tree$node.label <- makeLabel(study.tree)$node.label 
+comp.data <- comparative.data(phy=study.tree,data=anura.data,names.col="sp",vcv=T,vcv.dim=3)
 ```
 
 \newpage
@@ -54,7 +46,7 @@ comp.data <- comparative.data(phy=filo,data=mat,names.col="sp",vcv=T,vcv.dim=3)
 
 I. Species data 
 ---------------
-The species dataset contain six variables (see Methods for detailed information and [raw data](https://gist.github.com/paternogbc/d73612e22c36e538ee54) to download data.
+The species dataset contain six variables (see Methods for detailed information on data collection and [raw data](https://gist.github.com/paternogbc/d73612e22c36e538ee54) to download data).
   
 variable  | discription
 --------- | -----------
@@ -70,19 +62,18 @@ Specis data structure
 Last six rows of the species dataset:
 
 ```{r,echo=F}
-kable(tail(mat))
-str(mat)
+kable(tail(anura.data))
 ```
 
 II. Phylogeny
 ------------
-The phylogenetic tree used in this paper was pruned from: [Pyron and Wiens (2014)](http://www.sciencedirect.com/science/article/pii/S105579031100279X) anura super tree. The pruned tree with study species (509) is available at: [study tree](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/phy_Rohr_JEB_2014.tre).  
+The phylogenetic tree used in this paper was pruned from: [Pyron and Wiens (2014)](http://www.sciencedirect.com/science/article/pii/S105579031100279X) anura super tree. The pruned tree with study species (509) is available at: [study tree](link).  
 
 Phylogeny structure
 -------------------
 
 ```{r,echo=F,fig.height=6}
-filo
+study.tree
 comp.data$data$sp <- comp.data$tip.label
 plot(comp.data[[1]],"fan",show.tip.label=T,cex=0.08,label.offset=1.2,
      lab4ut="axial")
@@ -100,9 +91,9 @@ legend(legend=c("running","still"),pch=c(16,16),col=c("red","black"),
 A. Mean and standard deviation for Dominant frequency and Sout-vent-length
 --------------------------------------------------------------------------
 ```{r data summery0,echo=F}
-mat.summ <- summarise(group_by(mat,environment),meanDF=mean(DF),seDF=sd(DF),
+anura.data.summ <- summarise(group_by(anura.data,environment),meanDF=mean(DF),seDF=sd(DF),
                 meanSVL=mean(SVL),seSVL=sd(SVL))
-kable(mat.summ)
+kable(anura.data.summ)
 ```
 
 B. Dominant Frequency and Snout-Vent-Length distribution
@@ -110,17 +101,17 @@ B. Dominant Frequency and Snout-Vent-Length distribution
     
 ```{r datasummary1, message=FALSE,warning=FALSE,echo=FALSE,fig.height=4,fig.width=6,error=FALSE}
 ## DF:
-g1 <- ggplot(mat,aes(x=logDF,fill=environment))+
+g1 <- ggplot(anura.data,aes(x=logDF,fill=environment))+
 geom_histogram(alpha=.5,position="identity")+
-geom_vline(data=data.frame(mat.summ),aes(xintercept=log10(meanDF),colour=environment),linetype="dashed", size=1)+
+geom_vline(data=data.frame(anura.data.summ),aes(xintercept=log10(meanDF),colour=environment),linetype="dashed", size=1)+
 xlab("Dominant Frequency (hertz)[log10]")+
 theme(legend.position = c(0.2,.8),
       legend.background=element_rect("transparent"))
 
 ## SVL:
-g2 <- ggplot(mat,aes(x=logSVL,fill=environment))+
+g2 <- ggplot(anura.data,aes(x=logSVL,fill=environment))+
 geom_histogram(alpha=.5,position="identity")+
-geom_vline(data=data.frame(mat.summ),aes(xintercept=log10(meanSVL),colour=environment),linetype="dashed", size=1)+
+geom_vline(data=data.frame(anura.data.summ),aes(xintercept=log10(meanSVL),colour=environment),linetype="dashed", size=1)+
 xlab("Sount-vent-Length (mm)[log10]")+
 theme(legend.position = "none")
 grid.arrange(g1,g2,ncol=2)
@@ -143,21 +134,20 @@ Dominant Frequency and Snout-Vent-Length show significant phylogenetic signal, h
 ========================================
 We used a phylogenetic generalized least square model (PGLS) with dominant frequency as the response variable and reproduction habitat (lentic/lotic) and SVL as the explanatory variables to test if dominant frequency was affected by reproduction environment. Dominant frequencies and body sizes were log transformed (log10) before the analysis. To optimize branch length transformation, the lambda value was set by maximum likelihood (see [Freckleton et al., 2002](http://www.jstor.org/stable/10.1086/343873); [Orme et al., 2013](http://cran.r-project.org/web/packages/caper/vignettes/caper.pdf) for details). PGLS analysis were performed with the function `pgls` from the package `caper`.
 
-A. Data preparation:
+I. Data preparation:
 --------------------
 Using the function `comparative.data` we combined our phylogenie with the species dataset
 ```{r,echo=FALSE}
-comp.data <- comparative.data(phy=filo,data=mat,names.col="sp",vcv=T,vcv.dim=3)
+comp.data <- comparative.data(phy=study.tree,data=anura.data,names.col="sp",vcv=T,vcv.dim=3)
 comp.data 
 ```
 
-A. Checking the phylogenetic signal of the residuals from stantard OLS regression
+II. Checking the phylogenetic signal of the residuals from stantard OLS regression
 ---------------------------------------------------------------------------------
 In order to check the need to include the phylogeny in our analysis, first it is important to check if there is phylogenetic signal in the residuals of an Ordinary Least Square regression (OSL) (Kamilar & Cooper, 2013; Freckleton, 2009).
 
-Fitting OSL regression (formula = logDF ~ environment*logSVL):
-```{r,echo=FALSE,message=FALSE,warning=FALSE}
-mod.osl <- lm(logDF ~ environment*logSVL,mat)
+```{r,echo=T,message=FALSE,warning=FALSE}
+mod.osl <- lm(logDF ~ environment*logSVL,anura.data)
 # Extracting residuals from the model:
 comp.data$data$lm.res <- residuals(mod.osl)
 osl.resi.sig <- phylosignal(comp.data$data$lm.res,reps=999,comp.data$phy)
@@ -166,21 +156,21 @@ kable(osl.resi.sig)
 
 Since the residuals from OSL regression show phylogenetic signal k = `r round(as.numeric(osl.resi.sig[1]),digits=2)`, there is strong need to correct for phylogenetic nonindependence in data.  
 
-B. Data analysis:
+III. Data analysis:
 --------------------
 Fitting pgls model with with lambda adjusted by maximum likelihood:
-```{r}
+```{r, cache=TRUE}
 mod.pgls <- pgls(logDF ~ environment*logSVL, data=comp.data,lambda="ML")
 summary(mod.pgls)
 ```
 
 **ANOVA table**
-```{r,echo=FALSE}
+```{r,echo=FALSE,cache=TRUE}
 kable(anova(mod.pgls))
 ```
 
 Confidence interval for lambda estimation: 
-```{r,fig.height=4,fig.width=4}
+```{r,fig.height=4,fig.width=4,cache=TRUE}
 profile.lambda <- pgls.profile(mod.pgls)
 plot(profile.lambda)
 ```
