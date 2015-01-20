@@ -1,6 +1,6 @@
 ---
 class: article
-output: word_document
+output: pdf_document
 ---
 
 ```{r packages,message=FALSE,echo=FALSE}
@@ -15,7 +15,7 @@ mat_t_test <- read.table("data/df_t_test.csv",h=T,sep=",")
 
 Dear Karin Pfennig,
 
-We are now re-submiting the paper "Background Noise as a Selective Pressure: Stream-breeding Anurans  Call at Higher Frequencies" (JEB-2014-00562). All suggestion made by the referees were fully implemented and we trully believe that this new version achieved the quality standards of Journal of Evolutionary Biology. Addtionaly, a new supplementary material was produced with a complete discripition of all statstical analysis performed, containing also the raw data and R code for full reproducibility (see [supplementary material](link) for details and [Github repository](link) for access to all content). Bellow the authors answers for each reviewer comment and concern.
+We are now re-submiting the paper "Background Noise as a Selective Pressure: Stream-breeding Anurans  Call at Higher Frequencies" (JEB-2014-00562). All suggestion made by the referees were fully implemented and we trully believe that this new version achieved the quality standards of Journal of Evolutionary Biology. Addtionaly, a new supplementary material was produced with a complete discripition of all statstical analysis performed, containing also the raw data and R code for full reproducibility (see supplementary material for details and [Github repository](https://github.com/paternogbc/2014_Rohr_et_al_JEB) for access to all content). Bellow the authors answers for each reviewer comment and concern.
 
 ***
 # Reviewer 1
