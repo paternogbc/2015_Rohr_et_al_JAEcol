@@ -1,36 +1,130 @@
 ---
-title: 'Cover letter: Background Noise as a Selective Pressure: Anuran Species
-  from Lotic Environments Call at Higher Pitches'
+title: 'Cover letter: Background Noise as a Selective Pressure: Anuran Species from
+  Lotic Environments Call at Higher Pitches'
 author: David Lucas Röhr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Juncá ; Adrian
   A. Garda
 date: "December 17, 2014"
 output: pdf_document
+class: article
 ---
 
 ```{r packages,message=FALSE,echo=FALSE}
-library(ape);library(caper);library(phytools);library(knitr)
-library(dplyr);library(ggplot2);library(picante);library(reshape2)
+library(ape);library(caper);library(knitr)
 ```
 
 ```{r species data entry,echo=F,results='hide'}
 # Entrada de dados: correlação entre SVL max, min and med
-mat2 <- read.table("data_med_max.csv",h=T,sep=",")
+mat_cor <- read.table("data_cor.csv",h=T,sep=",")
+mat_t_test <- read.table("df_t_test.csv",h=T,sep=",")
 ```
 
+We are now re-submiting the paper "Background Noise as a Selective Pressure: Anuran Species from Lotic Environments Call at Higher Pitches". All suggestion made by the referees were fully implemented and we trully believe that this new version achieved the quality standards of Journal of Evolutionary Biology. Addtionaly, a new supplementary material was produced with a complete discripition of all statstical analysis performed, containing also the raw data and R code for full reproducibility (see [supplementary material](link) for details and [Github repository](link) for access to all content). Bellow the authors answers for each reviewer comment and concern.
 
-2. Comment
----------
->_I am somewhat puzzled about why the authors chose the MEAN DF as the response variable, but chose the MAXIMUM SVL as one of their predictor variables. Perhaps they have scientific reasons for doing so, but I can’t think of any particularly good ones. I think good arguments could be made for basing their analyses on (i) the MINIMUM DF and the MAXIMUM SVL, or (ii) the MEAN DF and MEAN SVL, or (iii) the MAXIMUM DF and MINIMUM SVL. In fact, I think a much more rigorous and thorough analysis of the data would report results for all three of these analyses. Without reporting these additional analyses, the authors could mistakenly convey the impression that they have gone fishing for statistical significance to find a particular analysis that supports their a priori hypothesis. I would like to see results from all three of these analyses in any revision of this manuscript.  Unless something interesting is revealed in these new analyses (e.g., outcomes inconsistent with the authors’ favored hypothesis), this should not lengthen the manuscript by more than a few more lines in the tables already presented_
+***
+# Reviewer 1
+
+1º Comment:
+----------
+>_There’s no need to use the jargon “lotic” and “lentic”. I strongly encourage the authors to replace these throughout with more familiar terms such as running and still._
 
 __Answer:__
-In order to ensure that our choice of using mean Dominant Frequency (DF) and maximum Snout-vent-length (SVL) do not affect the main conclusions of the analysis:  
+Modified accordingly. 
 
-1. We selected a random subsample of 30 species and recollected all data, including: mean, minimum and maximum values for DF and SVL.    
-2. Performed the Pearson correlation test between the mean, minimum and maximum values for DF and SVL (see results bellow).     
+2º Comment:
+----------
+>_The two environments differ in myriad ways other than sound. It seems likely, for example, that the predators at the two environments will differ in important ways that may impact frog calls. Or water flow may impact tadpole development which in turn affects body size and steroid hormones, both of which would impact calling behavior. Without explicit measures of sound levels in the two habitats, the authors should acknowledge and discuss the multitude of alternatives._
 
-Correlation tests: SVL (max,min,mean)
-```{r,echo=F,fig.height=3,fig.width=3}
-kable(cor(mat2[,2:3],method="pearson"))
+__Answer:__
+Modified accordingly. See new paragraph lines: XXXX
+
+3º Comment:  
+----------
+>_There are many forms of PGLS, and the authors should cite the specific methods that they used here. In addition, each method necessarily assumes an underlying evolutionary model that should be specified and justified here._
+
+__Answer:__
+Modified accordingly. See new paragraph lines: XXXX and [Supplementary Material](link).
+
+4º Comment:
+----------
+>_The authors might consider also applying the Hansen (1997) adaptation-Inertia model, which seems a better match to their evolutionary assumptions and would thus offer more specific insights._
+
+__Answer:__
+In order to consider the reviewer suggestion we re-analyzed our data with Martin and Hansen (1997) adaptation-Inertia model and found no significant difference between the two approaches (see bellow):
+
+model diagnostic:
+
+5º Comment:
+----------
+>_Vargas-Salinas & Amezquita (2014) did a similar analysis but with very different results. This paper is mentioned, but not discussed, in the Discussion. I would like to read in more detail why they think the results disagree._
+
+__Answer:__
+Modified accordingly. See lines: XXXX
+
+***
+# Reviewer 2
+
+1º Comment:
+----------
+>_“Pitch” refers to a perceptual experience, not a measurable, physical feature of a sound. One cannot equate pitch (the percept) with frequency (the physical measure). In addition, we do not know whether frogs experience “pitch” the same way humans do. Therefore, it is technically inappropriate to refer to the “pitch” of frog calls unless one is talking about how a human perceives the call. The appropriate technical term the authors should be using throughout the manuscript is “frequency.” All instances of “pitch” in the manuscript, including the title, should be changed to “frequency.” This may ultimately require more words, but it would make the writing technically correct, which it is not currently.  The authors may also want to make crystal clear that they are referring to “acoustic frequency” to avoid any possible confusion with changes in call rate._
+
+__Answer:__
+Modified accordingly.
+
+2º Comment:
+----------
+>_I am somewhat puzzled about why the authors chose the MEAN DF as the response variable, but chose the MAXIMUM SVL as one of their predictor variables. Perhaps they have scientific reasons for doing so, but I can’t think of any particularly good ones. I think good arguments could be made for basing their analyses on (i) the MINIMUM DF and the MAXIMUM SVL, or (ii) the MEAN DF and MEAN SVL, or (iii) the MAXIMUM DF and MINIMUM SVL. In fact, I think a much more rigorous and thorough analysis of the data would report results for all three of these analyses. Without reporting these additional analyses, the authors could mistakenly convey the impression that they have gone fishing for statistical significance to find a particular analysis that supports their a priori hypothesis. I would like to see results from all three of these analyses in any revision of this manuscript.  Unless something interesting is revealed in these new analyses (e.g., outcomes inconsistent with the authors’ favored hypothesis), this should not lengthen the manuscript by more than a few more lines in the tables already presented._
+
+__Answer:__
+In large comparative studies it is always hard to choose the best approach to represent species, however, we do not believe that the choice of using maximum body size affected the results presented in the manuscript.  
+
+  1. The decision to use maximum SVL was a pre-established criterion applied to all species, thus we find very unlikely that this choice could cause any non-random tendency in our analysis.  
+  2. We decided to use maximum SVL because data for most species was available in multiple publications and in it would be very hard to calculate a mean value from many sources. It would be possible to calculate the weighted mean among publications, however this approach would be unpractical considering the number of species included (509). Further, we could also use the mean value provided from one specific publication, however, this could include subjectivity to the analysis, diminishing its reproducibility. Thus, choosing the maximum value among papers exclude bias and represents the adult potential size of species considering multiple publications.  
+  3. Finally, in order to consider the second reviewer concerns about our choice of maximum SVL and mean dominant frequency we:   
+    1. Re-collected data for maximum, minimum and mean SVL and DF for 30 random species of our previous survey ([raw data](link)).
+    2. Performed a pearson correlation analysis among maximum, minimum and mean SVL and DF (see results bellow).
+
+Snout-vent-length:
+```{r correlation.test, echo=F}
+kable(cor(mat_cor[,1:3])) # Correlation test: Dominant Frequency  
 ```
 
-Based on the high values of correlation (all above 0.9) we can afirm that it is very unlikiy that our choice can cause any change on the main results. Thus, we believe that our choice is well justified and that the maximum SVL can be used without any problem.
+Dominant Frequency:
+```{r correlation.test2, echo=F}
+kable(cor(mat_cor[,4:6])) # Correlation test: Dominant Frequency  
+```
+
+  For both parameters (SVL and DF), the correlation coefficient between maximum, minimum and mean values was higher than 0.9, thus we truly believe that our choice of maximum SVL and mean DF by no means affected any aspect of our main results or final conclusions. Furthermore, our regression coefficients are very similar to the previous studies which tested this effect in comparative analysis (Boeckle et al., 2009; Hoskin et al., 2009; Gingras et al., 2013; Vargas-Salinas & Amezquita, 2014)
+
+3º Comment:
+----------
+>_For those instances in which there were “multiple hits” for a species in the literature, I think basing the decision about which to include in the dataset on “recency” (line 77) is a bad idea. The choice should be based on the quality of the study, sample sizes, etc. Not all studies are created equal. A recent study is not necessarily the best or most accurate.  I think decisions about which data to include in all analyses should be based on including either the “most” data or the “best” data, but certainly not the “most recent.” This will require some re-analyses of the data._
+
+__Answer:__
+  In order to achieve a large data set, we used practical pre-established criteria of data inclusion which enabled us to use more than 500 species. We totally agree that the most recent publication is not always the best one (especially considering the large number exceptional old school bioacousticians) and in other conditions it would be ideal to evaluate the quality of multiple papers in order to decide which one to cite, including the most reliable data and giving credit to the authors (although these citations are only included in the supplementary material). However, we believe that our criterion of including the most recent publication is justifiable and we show that this criterion will not affect the final result, especially with a large data set.\par
+  Judging the merit of multiple papers takes a relative large amount of time because we have to consider some very important factors such as the number of individual recorded, geographical distribution of individuals included, what equipment was used and journal of publication. We believe that in multiple occasions these decisions could lead to differences in opinion and we could be accused of bias to confirm our hypothesis, which is not the case with our simple pre-established selection criterion. We can easily infer that with a large number of data, the mean quality of recent and older researches is not significantly different. Furthermore, the recent improvement of recording equipments and sound analysis software is unquestionable.\par 
+  For the exclusion of any possibility that this criterion includes any kind of bias in our analysis, we collected data on dominant frequency from different papers for 30 species and used a paired t-test to test if there is any significant difference between the most recent compared to the older data ([raw data](link)):
+
+```{r correlation test, echo=F}
+t.test(mat_t_test[,1],mat_t_test[,2],paired=T)
+```
+
+The result showed that there is no significant difference on dominant frequency between recent and older publications, providing strong evidence that our criterion does not affect our results and conclusions.
+
+4º Comment:
+----------
+>_The authors need to report estimates of effect size (e.g., something like a partial eta-squared or R-squared). They will also need to make a discussion of the relative effects of SVL and habitat on DF a more prominent component of the paper. From looking at the results of the ANOVA table, it would seem that SVL has a MUCH larger effect than habitat type, but this is not something the authors appear to clearly acknowledge in the manuscript. What we might find is that, yes, there is some effect of habitat type, but it is a relatively small effect that turns up as statistically significant in a very large study like this one. This could also explain why some studies find it, and others do not. This would be important information that would allow the community of frog bioacousticians to determine whether we could (finally) agree to lay this issue to rest once and for all, and whether or not it is really all that interesting to keep devoting effort to study such a small effect.  This paper has some potential to make the following very important point: “Yes, there’s an effect of noise in lotic environments; it is a small effect; now let’s all move on to something else more interesting.”_
+
+__Answer:__
+Modified accordingly: See lines: XXX
+
+5º Comment:
+----------
+>_I think the authors have provided a somewhat superficial treatment of the literature in places.  They also appear to place more emphasis on citing recent papers documenting a particular phenomenon, instead of the original or best papers doing so. One place this problem is particularly relevant is on lines 132 to 139. The authors here make three points: (1) Body size (and hence DF) may be an important predictor of the outcomes of aggressive interactions. They cite a recent study by Meuche et al., 2012, but this idea goes back more than three decades to the work of Davies and Halliday (1978). (2) Male frogs can lower the frequency of their calls during aggressive interactions. While the cited 2002 paper by Bee & Bowling is one of the most recent documenting the effect, that paper is a short communication in a herpetology journal; Bill Wagner’s work on this topic, going back to 1989, is the best original work showing male frogs can do this (though there are some even earlier hints of this in the literature). Both Wagner and Bee published earlier and much better papers documenting the effect than the one cited by the authors. (3) Female frogs can exert selection on DF through mate choice preferences. The authors cite a paper by Gerhardt (1991); certain authors in the field who shall remain nameless have hammered this supposed preference into accepted frog dogma (= frogma?), but a much more careful and thorough analysis of all the data, reviewed by Schwartz and Gerhardt in (2001), would seem to suggest that any such preferences for frequency are relatively weak, and there are now examples of female frogs absolutely rejecting males having the lowest-frequency calls, and even female frogs preferring relatively higher-frequency calls. The take-home point is that the studies cited to support the generalizations being made in this particular paragraph are probably not the best, and leave the impression that the authors may possess a somewhat limited familiarity with the frog acoustic communication literature. Similar arguments could be made for other places in the manuscript, where the scholarship just doesn’t seem to be quite up to par with what one familiar with more of the literature might expect. I realize that there may be space limitations associated with Short Notes that ultimately limit the number of citations. If so, I would encourage the authors to cite the best papers or the original papers on a topic, and not simply the most recent._
+
+__Answer:__
+Modified accordingly. See Lines: XXX
+
+6º __Specific comments:__
+-------------------------
+All minor suggestions were implemented in this version of the manuscrip.
+
