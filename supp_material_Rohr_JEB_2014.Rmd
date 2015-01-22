@@ -1,7 +1,7 @@
 
 ---
 title: 'ELETRONIC SUPPLEMENTARY MATERIAL Background Noise as a Selective Pressure: Stream-breeding Anurans  Call at Higher Frequencies'
-author: David Lucas Röhr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Juncá; Adrian
+author: David Lucas R?hr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Junc?; Adrian
   A. Garda;
 date: "December 17, 2014"
 output: pdf_document
@@ -52,7 +52,7 @@ comp.data <- comparative.data(phy=study.tree,data=anura.data,names.col="sp",vcv=
 2.1 Species data 
 ----------------
 * To download __raw data__: [link](https://gist.github.com/paternogbc/d73612e22c36e538ee54).  
-* To download __pdf table__ with data and references used: [link](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/supp_material_Rohr_JEB_2014.pdf)
+* See Appendix 1 to download complete table with references used.
 
 The species dataset contains six variables (see Methods for detailed information on data collection).  
   
@@ -73,8 +73,8 @@ kable(tail(anura.data))
 
 2.2 Phylogentic tree
 --------------------
-The phylogenetic tree used in this paper was pruned from: [Pyron and Wiens (2014)](http://www.sciencedirect.com/science/article/pii/S105579031100279X) anura super tree.  
-* To dowanload the pruned tree with study species (509): [Study Tree]().  
+The phylogenetic tree used in this paper was pruned from: [Pyron and Wiens (2011)](http://www.sciencedirect.com/science/article/pii/S105579031100279X) anura super tree.  
+* To dowanload the pruned tree with study species (509): [Study Tree](https://github.com/paternogbc/2015_Rohr_et_al_JEB/blob/master/phylogeny/phy_Rohr_JEB_2014.tre).  
 
 ```{r,echo=F,fig.height=6}
 study.tree
@@ -117,7 +117,7 @@ theme(legend.position = "none")
 grid.arrange(g1,g2,ncol=2)
 ```
 
-_Figure S2: Distribution histograms for Dominant Frequency *(log10)* and Snout-vent length *(log10)*_
+_Figure S2: Distribution histograms for Dominant Frequency (log10) and Snout-vent length (log10)_
 
 \newpage
 
@@ -137,7 +137,7 @@ Dominant Frequency and Snout-Vent Length show significant phylogenetic signal, h
 3.2 Checking the phylogenetic signal of the residuals from stantard OLS regression
 ----------------------------------------------------------------------------------
 
-In order to check the need to include the phylogeny in our analysis, first it is important to check if there is phylogenetic signal in the residuals of an Ordinary Least Square regression (OSL) (Kamilar & Cooper, 2013; Freckleton, 2009).
+In order to check the need to include the phylogeny in our analysis, first it is important to check if there is phylogenetic signal in the residuals of an Ordinary Least Square regression (OSL) ([Kamilar & Cooper, 2013](http://royalsocietypublishing.org/content/368/1618/20120341.full); [Freckleton, 2009](http://onlinelibrary.wiley.com/doi/10.1111/j.1420-9101.2009.01757.x/full)).
 
 ```{r,echo=T,message=FALSE,warning=FALSE}
 mod.osl <- lm(logDF ~ environment*logSVL,anura.data)
@@ -218,14 +218,19 @@ AIC comparison shows that PGLS model has much lower AIC value round(`r AIC(mod.o
 
 5. References
 =============
-1. Pyron, R.A. & Wiens, J.J. 2011 A large-scale phylogeny of Amphibia including over 2800 species, and a revised classification of extant frogs, salamanders, and caecilians. Molecular Phylogenetics and Evolution 61, 543-583.  
-2. Blomberg, S. P., T. Garland, Jr., and A. R. Ives. 2003. Testing for phylogenetic signal in comparative data: behavioral traits are more labile. Evolution 57:717-745.  
-3. David Orme, Rob Freckleton, Gavin Thomas, Thomas Petzoldt, Susanne Fritz,
-  Nick Isaac and Will Pearse (2013). caper: Comparative Analyses of
+1. Pyron, A. R., & Wiens, J. J. (2011). A large-scale phylogeny of Amphibia including over 2800 species, and a revised classification of extant frogs, salamanders, and caecilians. Molecular Phylogenetics and Evolution, 61(2), 543-583. 
+
+2. Blomberg, S. P., Garland, T., & Ives, A. R. (2003). Testing for phylogenetic signal in comparative data: behavioral traits are more labile. Evolution, 57(4), 717-745.
+
+3. Orme, D., Freckleton, R., Thomas, G., Petzoldt, T., Fritz, S., Isaac, N. and Pearse, W. (2013). caper: Comparative Analyses of
   Phylogenetics and Evolution in R. R package version 0.5.2.
   http://CRAN.R-project.org/package=caper   
-4. Kamilar JM, Cooper N. 2013 Phylogenetic signal in primate behaviour, ecology and life history. Phil Trans R Soc B 368: 20120341. http://dx.doi.org/10.1098/rstb.2012.0341
-5. Freckleton, R.P. (2009) The seven deadly sins of comparative analysis. J Evol Biol, 22, 1367-1375.  
+  
+4. Kamilar, J. M., & Cooper, N. (2013). Phylogenetic signal in primate behaviour, ecology and life history. Philosophical Transactions of the Royal Society B: Biological Sciences, 368(1618), 20120341.
+
+5. Freckleton, R. P., Harvey, P. H., & Pagel, M. (2002). Phylogenetic analysis and comparative data: a test and review of evidence. The American Naturalist, 160(6), 712-726.
+
+6. Freckleton, R. P. (2009). The seven deadly sins of comparative analysis. Journal of Evolutionary Biology, 22(7), 1367-1375.
 
 ***
 When using the __data available__ in this paper, please cite the original publication.  
