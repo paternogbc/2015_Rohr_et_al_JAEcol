@@ -9,21 +9,25 @@
 ### last updade: 23.01.15
 #################################################################################
 
-#1: Packages used (for specific versions see Supp. Mat.):
-library(ape);library(caper)
+### Packages used (for specific versions see Supp. Mat.):
+library(ape);library(caper);library(dplyr);
 library(picante);library(RCurl);library(foreign)
 
-######################################################################################
-#2: Loading Data (raw data from Github repository)
+
+##################################### DATA ######################################
+#################################################################################
+### Loading Data (raw data from Github repository)
 
 # Species data:
-url.species <- "https://raw.githubusercontent.com/paternogbc/2015_Rohr_et_al_JEB/master/data/raw_data.csv"
+url.species <- paste("https://raw.githubusercontent.com",
+"/paternogbc/2015_Rohr_et_al_JEB/master/data/raw_data.csv",sep="")
 myData <- getURL(url.species,ssl.verifypeer = FALSE)
 mat <- read.csv(textConnection(myData))
 str(mat)
 
 # Phylogeny:
-url.phylogeny <- "https://raw.githubusercontent.com/paternogbc/2015_Rohr_et_al_JEB/master/phylogeny/amph_2014.tre"
+url.phylogeny <- paste("https://raw.githubusercontent.com",
+"/paternogbc/2015_Rohr_et_al_JEB/master/phylogeny/amph_2014.tre",sep="")
 myPhy <- getURL(url.phylogeny,ssl.verifypeer = FALSE)
 tree <- read.tree(textConnection(myPhy))
 str(tree)
@@ -38,10 +42,13 @@ sum(sort(study.tree$tip.label) != sort(mat$sp))
 
 ### Data preparation for pgls:
 comp.data <- comparative.data(phy=study.tree,data=mat,names.col="sp",vcv=T,vcv.dim=3)
-comp.data.runn <- comparative.data(phy=study.tree,data=subset(mat,environment=="running"),names.col="sp",vcv=T,vcv.dim=3)
-comp.data.still <- comparative.data(phy=study.tree,data=subset(mat,environment=="still"),names.col="sp",vcv=T,vcv.dim=3)
+comp.data.runn <- comparative.data(phy=study.tree,data=subset(mat,environment=="running"),
+                                   names.col="sp",vcv=T,vcv.dim=3)
+comp.data.still <- comparative.data(phy=study.tree,data=subset(mat,environment=="still"),
+                                    names.col="sp",vcv=T,vcv.dim=3)
 
-######################################### Analysis ########################################################
+#################################### Analysis ###################################
+#################################################################################
 
 ### Table 1 (Phylogenetic signal logSVL and logDF)
 k.signal <- multiPhylosignal(select(comp.data$data,logDF,logSVL),comp.data$phy,reps=999)
@@ -65,7 +72,8 @@ still.coef <- c(c(coef.pgls2[1]+coef.pgls2[3]),coef.pgls2[2])
 ### Mean difference between still and running environments (Hertz)
 diff.intercep <- exp(running.coef[1]) - exp(still.coef[1])
 
-######################################### Figure 1 ########################################################
+################################## Figure 1 ######################################
+##################################################################################
 
 ### Figure 1 (dispersion plot with original data (logDF ~ environment + lofSVL))
 
@@ -94,7 +102,8 @@ ypred.still <- still.coef[1] + still.coef[2]*x.still
 lines(x.running,ypred.running,col="red",lwd=2)
 lines(x.still,ypred.still,col="black",lwd=2)
 
-######################################### Figure S1 ########################################################
+################################## Figure S1 #####################################
+##################################################################################
 
 ### Figure S1: (Study tree)
 comp.data$data$sp <- comp.data$tip.label
@@ -104,3 +113,4 @@ tiplabels(frame="circle",col=comp.data$data$environment,
           pch=c(16,16),cex=0.3)
 legend(legend=c("running","still"),pch=c(16,16),col=c("red","black"),
        "topleft",bty="n")
+
