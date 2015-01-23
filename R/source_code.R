@@ -1,7 +1,7 @@
 ### Source Code for:  
 #################################################################################
 ### Background Noise as a Selective Pressure: Stream-breeding Anurans  Call at 
-### Higher Frequenciesfor Phylogenetic Analysis of Pitches in Anura 
+### Higher Frequencies for Phylogenetic Analysis of Pitches in Anura 
 ### Journal of Evolutionary Biology (2015)
 ### Authors: David Lucas Röhr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Juncâ;
 ### Adrian A. Garda; 
