@@ -11,8 +11,7 @@
 
 ### Packages used (for specific versions see Supp. Mat.):
 library(ape);library(caper);library(dplyr);
-library(picante);library(RCurl);library(foreign)
-
+library(picante);library(RCurl);library(foreign);
 
 ##################################### DATA ######################################
 #################################################################################
@@ -70,9 +69,6 @@ running.coef <- coef.pgls2[c(1,2)]
 still.coef <- c(c(coef.pgls2[1]+coef.pgls2[3]),coef.pgls2[2])
 ### Mean difference between still and running environments (Hertz)
 diff.intercep <- exp(running.coef[1]) - exp(still.coef[1])
-
-### PGLS analysis per family:
-
 
 ################################## Figure 1 ######################################
 ##################################################################################
