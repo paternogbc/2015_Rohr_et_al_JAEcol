@@ -20,14 +20,14 @@ library(picante);library(RCurl);library(foreign)
 
 # Species data:
 url.species <- paste("https://raw.githubusercontent.com",
-"/paternogbc/2015_Rohr_et_al_JEB/master/data/raw_data.csv",sep="")
+"/paternogbc/2015_Rohr_et_al_JAEcol/master/data/raw_data.csv",sep="")
 myData <- getURL(url.species,ssl.verifypeer = FALSE)
 mat <- read.csv(textConnection(myData))
 str(mat)
 
 # Phylogeny:
 url.phylogeny <- paste("https://raw.githubusercontent.com",
-"/paternogbc/2015_Rohr_et_al_JEB/master/phylogeny/amph_2014.tre",sep="")
+"/paternogbc/2015_Rohr_et_al_JAEcol/master/phylogeny/amph_2014.tre",sep="")
 myPhy <- getURL(url.phylogeny,ssl.verifypeer = FALSE)
 tree <- read.tree(textConnection(myPhy))
 str(tree)
