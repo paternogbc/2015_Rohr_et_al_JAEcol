@@ -1,6 +1,6 @@
 PackratFormat: 1.4
-PackratVersion: 0.4.1.8
-RVersion: 3.1.3
+PackratVersion: 0.4.3
+RVersion: 3.2.0
 Repos: CRAN=http://cran.rstudio.com
 
 Package: BH
@@ -49,12 +49,6 @@ Source: CRAN
 Version: 1.0-6
 Hash: cb26464a8321628636b547518994c931
 
-Package: caTools
-Source: CRAN
-Version: 1.17.1
-Hash: bb5fdc266f716b8a289a4f92007d53e3
-Requires: bitops
-
 Package: caper
 Source: CRAN
 Version: 0.5.2
@@ -88,11 +82,6 @@ Version: 0.7
 Hash: 96c38894bf65a2e890f7c6ec840a6466
 Requires: stringr
 
-Package: foreign
-Source: CRAN
-Version: 0.8-63
-Hash: a3a8e60f5a8fa7fb44445e6489a4bba3
-
 Package: formatR
 Source: CRAN
 Version: 1.2
@@ -118,12 +107,6 @@ Package: highr
 Source: CRAN
 Version: 0.5
 Hash: d9f29aef93e6fd4f287cec2de07ca468
-
-Package: htmltools
-Source: CRAN
-Version: 0.2.6
-Hash: 2c87108d130de261ac3c468d3316ae42
-Requires: digest
 
 Package: knitr
 Source: CRAN
@@ -169,13 +152,9 @@ Version: 1.0-2
 Hash: 77cba5f561791810a6946f9ebff85a0e
 
 Package: packrat
-Source: github
-Version: 0.4.1.8
-Hash: ee57b7e7ba891d23079b12f1ff5106d0db0594e5
-GithubRepo: packrat
-GithubUsername: rstudio
-GithubRef: v0.98.1000
-GithubSha1: ee57b7e7ba891d23079b12f1ff5106d0db0594e5
+Source: CRAN
+Version: 0.4.3
+Hash: 16c72d5c802629fae5a4abca901e0199
 
 Package: permute
 Source: CRAN
