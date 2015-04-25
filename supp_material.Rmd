@@ -3,14 +3,14 @@
 title: 'ELETRONIC SUPPLEMENTARY MATERIAL Background Noise as a Selective Pressure: Stream-breeding Anurans  Call at Higher Frequencies'
 author: David Lucas Röhr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Juncá; Adrian
   A. Garda;
-date: "December 17, 2014"
+date: "April, 2015"
 output: pdf_document
 toc: true
 theme: "united"
 ---
 
 ***
->This doccument follows the principles of reproducible research (Peng, 2011). All Data and code required to repeat the analysis bellow are linked at [Github](https://github.com/paternogbc/2014_Rohr_et_al_JEB). To dowanload the __source code__ used to generate all figures, tables and analysis in the paper, please see: [source code](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/R/Rhor_JEB_2014_source_code.R). This documment was generated in __R studio__ with `kintr` package.
+>This doccument follows the principles of reproducible research (Peng, 2011). All Data and code required to repeat the analysis bellow are linked at [Github](https://github.com/paternogbc/2015_Rohr_et_al_JAEcol). To dowanload the __source code__ used to generate all figures, tables and analysis in the paper, please see: [source code](https://github.com/paternogbc/2015_Rohr_et_al_JAEcol/blob/master/R/source_code.R). This documment was generated in __R studio__ with `kintr` package.
 
 \newpage
 
@@ -29,12 +29,12 @@ library(ape);library(caper);library(knitr)
 library(dplyr);library(ggplot2);library(picante);library(gridExtra)
 ```
 
-Please check the [Packages versions](https://github.com/paternogbc/2014_Rohr_et_al_JEB/blob/master/packrat/packrat.lock), for details.
+Please check the [Packages versions](https://github.com/paternogbc/2015_Rohr_et_al_JAEcol/blob/master/packrat/packrat.lock), for details.
 
 
-```{r species.data}
+```{r species.data, echo=F}
 # Raw data:
-anura.data <- read.csv("data/raw_data.csv",h=T)
+anura.data <- read.csv("data/data_raw.csv",h=T)
 # Correlation data:
 cor.data <- read.csv("data/data_correlation_SVL.csv",h=T)
 # DF before after data:
@@ -43,7 +43,7 @@ DFpaired.data <- read.csv("data/data_DF_before_after.csv",h=T)
 
 ```{r phylogeny.data entry,echo=F,results='hide'}
 tree<-read.tree("phylogeny/amph_2014.tre")
-tree.crop<-drop.tip(tree,as.character(anura.data[,1]))             
+tree.crop<-drop.tip(tree,as.character(anura.data[,2]))             
 study.tree<-(drop.tip(tree,tree.crop$tip.label))
 study.tree$node.label <- makeLabel(study.tree)$node.label 
 comp.data <- comparative.data(phy=study.tree,data=anura.data,names.col="sp",vcv=T,vcv.dim=3)
@@ -56,19 +56,21 @@ comp.data <- comparative.data(phy=study.tree,data=anura.data,names.col="sp",vcv=
 
 2.1 Species data 
 ----------------
-* To download __raw data__: [link](https://gist.github.com/paternogbc/d73612e22c36e538ee54).  
+* To download __raw data__: [link](https://github.com/paternogbc/2015_Rohr_et_al_JAEcol/blob/master/data/raw_data.csv).  
+
 * See Appendix 1 to download complete table with references used.
 
 The species dataset contains six variables (see Methods for detailed information on data collection).  
   
 variable  | discription
 --------- | -----------
+fam       | family
 sp        | species name
-environment| Reproductive environment (lentic or lotic)
+environment| Reproductive environment (still or flowing)
 DF| Dominant frequency (hertz)
 SVL|snout-vent length (mm)
-logDF| log10 of dominant frequency (DF)
-logSVL| log10 of snout vent length (SVL)
+logDF| log of dominant frequency (DF)
+logSVL| log of snout vent length (SVL)
 
 Last six rows of the species dataset:
 
@@ -79,7 +81,7 @@ kable(tail(anura.data))
 2.2 Phylogentic tree
 --------------------
 The phylogenetic tree used in this paper was pruned from: [Pyron and Wiens (2011)](http://www.sciencedirect.com/science/article/pii/S105579031100279X) anura super tree.  
-* To dowanload the pruned tree with study species (509): [Study Tree](https://github.com/paternogbc/2015_Rohr_et_al_JEB/blob/master/phylogeny/phy_Rohr_JEB_2014.tre).  
+* To dowanload the pruned tree with study species (509): [Study Tree](https://github.com/paternogbc/2015_Rohr_et_al_JAEcol/blob/master/phylogeny/study.tree.tre).  
 
 ```{r,echo=F,fig.height=6}
 study.tree
@@ -122,7 +124,37 @@ theme(legend.position = "none")
 grid.arrange(g1,g2,ncol=2)
 ```
 
-_Figure S2: Distribution histograms for Dominant Frequency (log10) and Snout-vent length (log10)_
+_Figure S2: Distribution histograms for Dominant Frequency (log) and Snout-vent length (log)_
+
+2.4 Testing for bias in Dominant Frequency between old and new publications
+---------------------------------------------------------------------------
+
+To construct a large data set, we difened some practical, pre-established criteria of data inclusion that enabled us to use more than 500 species. We agree that the most recent publication is not always the best, however the recent improvement of recording equipment and sound analysis software is unquestionable. Furthermore, judging the merit of multiple papers takes a large amount of time because factors such as the number of individuals recorded, geographical location of individuals included and recording equipment used must be considered. We believe that in multiple occasions these decisions can be subjective, leading to uncertainty about possible bias in the resulting dataset. Our pre-established criterion explicitly avoids this, leaving no space to speculations about such biases. To be sure, we collected data on dominant frequency from different papers for 30 randomly-selected species from our dataset and found no significant differences between the most recent compared to the older data:
+
+```{r correlation test, echo=F}
+t.test(DFpaired.data[,1],DFpaired.data[,2],paired=T)
+```
+
+This provides strong evidence that our criterion does not affect our results and conclusions.
+
+2.5 Testing correlation between mean and maximum SVL
+----------------------------------------------------
+
+In large comparative studies it is always hard to choose the best approach to represent species, however, we do not believe that the choice of using maximum body size affected the results presented in the manuscript.  
+
+1.  The decision to use maximum SVL was a pre-established criterion applied to all species, thus we find very unlikely that this choice could cause any non-random tendency in our analysis.  
+
+2.  We decided to use maximum SVL because data for most species was available in multiple publications and it would therefore be hard to calculate a mean value from many sources. It would be possible to calculate the weighted mean among publications, however this approach would be unpractical considering the number of species included (509). Furthermore, we could also use the mean value provided from one specific publication, however, this could include subjectivity to the analysis, diminishing its reproducibility. Thus, choosing the maximum value among papers excludes bias and represents the adult potential size of species considering multiple publications.  
+
+3.  Finally, in order to consider the concerns about our choice of maximum SVL:
+    1.    Re-collected data for maximum and mean SVL for 30 random species of our previous survey.  
+    2.    Performed a Pearson's correlation analysis between maximum and mean SVL (see results below).  
+
+```{r correlation.test, echo=F}
+kable(cor(cor.data[,2:3])) # Correlation test: Dominant Frequency  
+```
+
+  The correlation coefficient between maximum and mean SVL values was higher than 0.95, thus we truly believe that our choice of maximum SVL by no means affected any aspect of our main results or final conclusions. 
 
 \newpage
 
@@ -154,6 +186,7 @@ kable(osl.resi.sig)
 
 Because the residuals from OSL regression show phylogenetic signal k = `r round(as.numeric(osl.resi.sig[1]),digits=2)`, it is necessary to correct for phylogenetic non-independence in data.  
 
+  
 \newpage
 
 4. Data analysis 
@@ -165,7 +198,25 @@ We used a phylogenetic generalized least square model (PGLS) with dominant frequ
 Using the function `comparative.data` we combined our phylogenie with the species dataset
 ```{r,echo=FALSE}
 comp.data <- comparative.data(phy=study.tree,data=anura.data,names.col="sp",vcv=T,vcv.dim=3)
-comp.data 
+
+### Only bufonidae:
+comp.data.bufo <- comparative.data(phy=study.tree,
+                                   data=filter(anura.data,fam=="Bufonidae"),names.col="sp",vcv=T,vcv.dim=3)
+
+### Only Ranidae:
+comp.data.rani <- comparative.data(phy=study.tree,
+                                   data=filter(anura.data,fam=="Ranidae"),names.col="sp",vcv=T,vcv.dim=3)
+
+### Only Hylidae:
+comp.data.hyli <- comparative.data(phy=study.tree,
+                                   data=filter(anura.data,fam=="Hylidae"),names.col="sp",vcv=T,vcv.dim=3)
+
+### bufonidae + Hylidae + Ranidae
+comp.data.fam <- comparative.data(phy=study.tree,
+                                   data=droplevels(filter(anura.data,
+                                               fam=="Hylidae" |
+                                               fam=="Ranidae" |
+                                               fam=="Bufonidae")),names.col="sp",vcv=T,vcv.dim=3)
 ```
 
 4.2 Phylogenetic generalized least square model (PGLS)
@@ -218,6 +269,34 @@ kable(AIC(mod.osl,mod.pgls))
 ```
 
 AIC comparison shows that PGLS model has much lower AIC value round(`r AIC(mod.osl,mod.pgls)[2,2]`) then OSL model round(`r AIC(mod.osl,mod.pgls)[1,2]`). Thus, PGLS model is a better fit for the data.  
+
+4.7 Phylogenetic generalized least square model (PGLS) within families
+----------------------------------------------------------------------
+
+### 4.7.1 Bufonidae:
+
+Fitting pgls model with with lambda adjusted by maximum likelihood:
+```{r, cache=TRUE}
+mod.pgls.bufo <- pgls(logDF ~ environment*logSVL, data=comp.data.bufo,lambda="ML")
+kable(anova(mod.pgls.bufo))
+```
+
+### 4.7.2 Ranidae:
+
+Fitting pgls model with with lambda adjusted by maximum likelihood:
+```{r, cache=TRUE}
+mod.pgls.rani <- pgls(logDF ~ environment*logSVL, data=comp.data.rani,lambda="ML")
+kable(anova(mod.pgls.rani))
+```
+
+### 4.7.2 Hylidae:
+
+Fitting pgls model with with lambda adjusted by maximum likelihood:
+```{r, cache=TRUE}
+mod.pgls.hyli <- pgls(logDF ~ environment*logSVL, data=comp.data.hyli,lambda="ML")
+kable(anova(mod.pgls.hyli))
+```
+
 
 \newpage
 

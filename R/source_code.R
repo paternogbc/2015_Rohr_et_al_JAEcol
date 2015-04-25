@@ -19,9 +19,10 @@ library(picante);library(RCurl);library(foreign);
 
 # Species data:
 url.species <- paste("https://raw.githubusercontent.com",
-"/paternogbc/2015_Rohr_et_al_JAEcol/master/data/raw_data.csv",sep="")
+    "/paternogbc/2015_Rohr_et_al_JAEcol/master/data/data_raw.csv",sep="")
 myData <- getURL(url.species,ssl.verifypeer = FALSE)
 mat <- read.csv(textConnection(myData))
+str(mat)
 
 # Phylogeny:
 url.phylogeny <- paste("https://raw.githubusercontent.com",
@@ -31,7 +32,7 @@ tree <- read.tree(textConnection(myPhy))
 str(tree)
 
 # Pruned phylogeny:
-tree.drop  <- drop.tip(tree,as.character(mat[,1]))              
+tree.drop  <- drop.tip(tree,as.character(mat[,2]))              
 study.tree <- (drop.tip(tree,tree.drop$tip.label))
 study.tree$node.label <- makeLabel(study.tree)$node.label 
 
@@ -40,7 +41,7 @@ sum(sort(study.tree$tip.label) != sort(mat$sp))
 
 ### Data preparation for pgls:
 comp.data <- comparative.data(phy=study.tree,data=mat,names.col="sp",vcv=T,vcv.dim=3)
-comp.data.runn <- comparative.data(phy=study.tree,data=subset(mat,environment=="running"),
+comp.data.runn <- comparative.data(phy=study.tree,data=subset(mat,environment=="flowing"),
                                    names.col="sp",vcv=T,vcv.dim=3)
 comp.data.still <- comparative.data(phy=study.tree,data=subset(mat,environment=="still"),
                                     names.col="sp",vcv=T,vcv.dim=3)
@@ -83,16 +84,16 @@ plot(logDF~ logSVL,col="black",pch=2,data=subset(mat,mat$environment=="still"),
      yaxp=c(5,10,10),xaxp=c(2.5,5.5,15),
      frame="F",cex=1.2,cex.lab=1.1)
 points(logDF~ logSVL,cex=1.2,
-       col="red",pch=1,data=subset(mat,mat$environment=="running"))
+       col="red",pch=1,data=subset(mat,mat$environment=="flowing"))
 text(x=5.1,y=10, "Y = -0.87x + C     ",cex=1)
-text(x=5.1,y=9.6,"C = 11.05 (running)",cex=1)
+text(x=5.1,y=9.6,"C = 11.05 (flowing)",cex=1)
 text(x=5.1,y=9.2,"C = 10.86 (still)  ",cex=1)
 
 ### Regression lines:
-SVL.ran.running <- with(subset(mat,environment=="running"),range(logSVL))
+SVL.ran.running <- with(subset(mat,environment=="flowing"),range(logSVL))
 SVL.ran.still <- with(subset(mat,environment=="still"),range(logSVL))
-x.still <- seq(SVL.ran.running[1],SVL.ran.running[2],0.01)
-x.running <- seq(SVL.ran.still[1],SVL.ran.still[2],0.01)
+x.running <- seq(SVL.ran.running[1],SVL.ran.running[2],0.01)
+x.still<- seq(SVL.ran.still[1],SVL.ran.still[2],0.01)
 
 ypred.running <- running.coef[1] + running.coef[2]*x.running
 ypred.still <- still.coef[1] + still.coef[2]*x.still
@@ -109,6 +110,8 @@ plot(comp.data[[1]],"fan",show.tip.label=T,cex=0.08,label.offset=1.2,
      lab4ut="axial")
 tiplabels(frame="circle",col=comp.data$data$environment,
           pch=c(16,16),cex=0.3)
-legend(legend=c("running","still"),pch=c(16,16),col=c("red","black"),
+legend(legend=c("flowing","still"),pch=c(16,16),col=c("red","black"),
        "topleft",bty="n")
+
+
 

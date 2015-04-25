@@ -49,6 +49,12 @@ Source: CRAN
 Version: 1.0-6
 Hash: cb26464a8321628636b547518994c931
 
+Package: caTools
+Source: CRAN
+Version: 1.17.1
+Hash: bb5fdc266f716b8a289a4f92007d53e3
+Requires: bitops
+
 Package: caper
 Source: CRAN
 Version: 0.5.2
@@ -107,6 +113,12 @@ Package: highr
 Source: CRAN
 Version: 0.5
 Hash: d9f29aef93e6fd4f287cec2de07ca468
+
+Package: htmltools
+Source: CRAN
+Version: 0.2.6
+Hash: 2c87108d130de261ac3c468d3316ae42
+Requires: digest
 
 Package: knitr
 Source: CRAN
@@ -183,6 +195,12 @@ Source: CRAN
 Version: 1.4.1
 Hash: d3d77b083fd5485f674487aa23011ea7
 Requires: Rcpp, plyr, stringr
+
+Package: rmarkdown
+Source: CRAN
+Version: 0.5.1
+Hash: 2d87f70c12c5558c50c4b3587fc6f499
+Requires: caTools, htmltools, knitr, yaml
 
 Package: scales
 Source: CRAN
