@@ -191,14 +191,16 @@ Because the residuals from OSL regression show phylogenetic signal k = `r round(
 
 4. Data analysis 
 ========================================
-We used a phylogenetic generalized least square model (PGLS) with dominant frequency as the response variable and reproduction habitat (lentic/lotic) and SVL as the explanatory variables to test if dominant frequency was affected by reproduction environment. Dominant frequencies and body sizes were log transformed (log10) before the analysis. To optimize branch length transformation, the lambda value was set by maximum likelihood (see [Freckleton et al., 2002](http://www.jstor.org/stable/10.1086/343873); [Orme et al., 2013](http://cran.r-project.org/web/packages/caper/vignettes/caper.pdf) for details). PGLS analysis were performed with the function `pgls` from the package `caper`.
+We used a phylogenetic generalized least square model (PGLS) with dominant frequency as the response variable and reproduction habitat (lentic/lotic) and SVL as the explanatory variables to test if dominant frequency was affected by reproduction environment. Dominant frequencies and body sizes were log transformed before the analysis. To optimize branch length transformation, the lambda value was set by maximum likelihood (see [Freckleton et al., 2002](http://www.jstor.org/stable/10.1086/343873); [Orme et al., 2013](http://cran.r-project.org/web/packages/caper/vignettes/caper.pdf) for details). PGLS analysis were performed with the function `pgls` from the package `caper`.
 
 4.1 Data preparation:
 --------------------
 Using the function `comparative.data` we combined our phylogenie with the species dataset
-```{r,echo=FALSE}
+```{r,echo=T}
 comp.data <- comparative.data(phy=study.tree,data=anura.data,names.col="sp",vcv=T,vcv.dim=3)
+```
 
+```{r,echo=F}
 ### Only bufonidae:
 comp.data.bufo <- comparative.data(phy=study.tree,
                                    data=filter(anura.data,fam=="Bufonidae"),names.col="sp",vcv=T,vcv.dim=3)
@@ -233,22 +235,27 @@ summary(mod.pgls)
 kable(anova(mod.pgls))
 ```
 
-4.4 Confidence interval for lambda estimation
+4.4 Lambda estimation
 --------------------------------------------
 ```{r,fig.height=4,fig.width=4,cache=TRUE}
 profile.lambda <- pgls.profile(mod.pgls)
 plot(profile.lambda)
 ```
 
-4.5 Model diagnostic:
+_Figure S3: Confidence interval for lambda estimation_
+
+4.5 Model diagnostic
 --------------------
 
-### 4.5.1 Standard graphic methods for model diagnostics   
+### 4.5.1 Diagnostic graphs   
 
 ```{r,echo=F,fig.height=5,fig.width=5}
 par(mfrow=c(2,2))
 plot(mod.pgls)
 ```
+
+_Figure S4: Standard graphic methods for model diagnostics_  
+
 
 Residulas do not show any tendency. 
 
@@ -268,10 +275,12 @@ Results above shows that the residuals do not present significant phylogenetic s
 kable(AIC(mod.osl,mod.pgls))
 ```
 
-AIC comparison shows that PGLS model has much lower AIC value round(`r AIC(mod.osl,mod.pgls)[2,2]`) then OSL model round(`r AIC(mod.osl,mod.pgls)[1,2]`). Thus, PGLS model is a better fit for the data.  
+AIC comparison shows that PGLS model has much lower AIC value (`r round(AIC(mod.osl,mod.pgls)[2,2])`) tham OSL model (`r round(AIC(mod.osl,mod.pgls)[1,2])`). Thus, PGLS model is a better fit for the data.  
 
 4.7 Phylogenetic generalized least square model (PGLS) within families
 ----------------------------------------------------------------------
+
+To test if the environment effect on Dominant Frequency is independent of taxonomic group, we performed pgls models for the three families in this dataset with more tham 30 species (Bufonidae, Ranidae and Hylidae). 
 
 ### 4.7.1 Bufonidae:
 
@@ -297,6 +306,56 @@ mod.pgls.hyli <- pgls(logDF ~ environment*logSVL, data=comp.data.hyli,lambda="ML
 kable(anova(mod.pgls.hyli))
 ```
 
+```{r within.family graphs, echo=F}
+### Bufonidae:
+g.fam1 <- ggplot(comp.data$data, aes(y=logDF,x=logSVL))+
+    geom_point(colour="gray",size=1,alpha=.4)+
+    geom_point(data=comp.data.bufo$data,alpha=.7,
+               aes(y=logDF,x=logSVL,colour=environment),size=1)+
+    geom_smooth(data=comp.data.bufo$data,se=F,
+                aes(y=logDF,x=logSVL,colour=environment),method="lm")+
+    theme(panel.background = element_rect(fill="white",colour="black"),
+          axis.text = element_text(size=6),
+          axis.title = element_text(size=8),
+          legend.position = "none")+
+    ggtitle("Bufonidae")+
+    ylab("Log dominant frequency (lnDF)")+
+    xlab("Log snout-vent length (lnSVL)")
+    
+
+### Ranidae:
+g.fam2 <- ggplot(comp.data$data, aes(y=logDF,x=logSVL))+
+    geom_point(colour="gray",size=1,alpha=.4)+
+    geom_point(data=comp.data.rani$data,alpha=.7,
+               aes(y=logDF,x=logSVL,colour=environment),size=1)+
+    geom_smooth(data=comp.data.rani$data,se=F,
+                aes(y=logDF,x=logSVL,colour=environment),method="lm")+
+    theme(panel.background = element_rect(fill="white",colour="black"),
+          axis.text = element_text(size=6),
+          axis.title = element_text(size=8),
+          legend.position = "none")+
+    ggtitle("Ranidae")+
+    ylab("Log dominant frequency (lnDF)")+
+    xlab("Log snout-vent length (lnSVL)")
+
+### Hylidae:
+g.fam3 <- ggplot(comp.data$data, aes(y=logDF,x=logSVL))+
+    geom_point(colour="gray",size=1,alpha=.4)+
+    geom_point(data=comp.data.hyli$data,alpha=.7,
+               aes(y=logDF,x=logSVL,colour=environment),size=1)+
+    geom_smooth(data=comp.data.hyli$data,se=F,
+                aes(y=logDF,x=logSVL,colour=environment),method="lm")+
+    theme(panel.background = element_rect(fill="white",colour="black"),
+          axis.text = element_text(size=6),
+          axis.title = element_text(size=8),
+          legend.position = c(0.8,.7))+
+    ggtitle("Hylidae")+
+    ylab("Log dominant frequency (lnDF)")+
+    xlab("Log snout-vent length (lnSVL)") 
+    grid.arrange(g.fam3,g.fam2,g.fam1,ncol=2)
+```
+
+_Figure S5: Regression plots for three anura families (Hylidae, Ranidae, Bufonidae)._
 
 \newpage
 

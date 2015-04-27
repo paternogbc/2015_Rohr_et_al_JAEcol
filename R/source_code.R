@@ -10,8 +10,8 @@
 #################################################################################
 
 ### Packages used (for specific versions see Supp. Mat.):
-library(ape);library(caper);library(dplyr);
-library(picante);library(RCurl);library(foreign);
+library(ape);library(caper);library(dplyr);library(gridExtra)
+library(picante);library(RCurl);library(foreign);library(ggplot2)
 
 ##################################### DATA ######################################
 #################################################################################
@@ -113,5 +113,64 @@ tiplabels(frame="circle",col=comp.data$data$environment,
 legend(legend=c("flowing","still"),pch=c(16,16),col=c("red","black"),
        "topleft",bty="n")
 
+########################## Figure S5 (within family Pgls) ########################
+##################################################################################
 
+### Bufonidae:
+mat.buf <- filter(mat,fam=="Bufonidae")
 
+g.fam1 <- ggplot(mat, aes(y=logDF,x=logSVL))+
+    geom_point(colour="gray",size=3,alpha=.4)+
+    geom_point(data=mat.buf,alpha=.7,
+               aes(y=logDF,x=logSVL,colour=environment),size=3)+
+    geom_smooth(data=mat.buf,se=F,
+                aes(y=logDF,x=logSVL,colour=environment),method="lm")+
+    theme(panel.background = element_rect(fill="white",colour="black"),
+          axis.text = element_text(size=14),
+          axis.title = element_text(size=16),
+          legend.position = "none")+
+    ggtitle("Bufonidae")+
+    ylab("Log dominant frequency (lnDF)")+
+    xlab("Log snout-vent length (lnSVL)")+
+    annotate("text", x = c(3.4,3), y = c(5.5,6),
+             label = c("p = 0.415 (environment)","N = 49"))
+
+### Ranidae:
+mat.ran <- filter(mat,fam=="Ranidae")
+
+g.fam2 <- ggplot(mat, aes(y=logDF,x=logSVL))+
+    geom_point(colour="gray",size=3,alpha=.4)+
+    geom_point(data=mat.ran,alpha=.7,
+               aes(y=logDF,x=logSVL,colour=environment),size=3)+
+    geom_smooth(data=mat.ran,se=F,
+                aes(y=logDF,x=logSVL,colour=environment),method="lm")+
+    theme(panel.background = element_rect(fill="white",colour="black"),
+          axis.text = element_text(size=14),
+          axis.title = element_text(size=16),
+          legend.position = "none")+
+    ggtitle("Ranidae")+
+    ylab("Log dominant frequency (lnDF)")+
+    xlab("Log snout-vent length (lnSVL)")+
+    annotate("text", x = c(3.4,3), y = c(5.5,6),
+             label = c("p < 0.001 (environment)","N = 38"))
+
+### Hylidae:
+mat.hyl <- filter(mat,fam=="Hylidae")
+
+g.fam3 <- ggplot(mat, aes(y=logDF,x=logSVL))+
+    geom_point(colour="gray",size=3,alpha=.4)+
+    geom_point(data=mat.hyl,alpha=.7,
+               aes(y=logDF,x=logSVL,colour=environment),size=3)+
+    geom_smooth(data=mat.hyl,se=F,
+                aes(y=logDF,x=logSVL,colour=environment),method="lm")+
+    theme(panel.background = element_rect(fill="white",colour="black"),
+          axis.text = element_text(size=14),
+          axis.title = element_text(size=16),
+          legend.position = c(0.8,.8))+
+    ggtitle("Hylidae")+
+    ylab("Log dominant frequency (lnDF)")+
+    xlab("Log snout-vent length (lnSVL)")+
+    annotate("text", x = c(3.4,3), y = c(5.5,6),
+             label = c("p = 0.005 (environment)","N = 161"))
+    
+grid.arrange(g.fam3,g.fam2,g.fam1,ncol=2)
