@@ -1,12 +1,13 @@
 
 ---
-title: 'ELETRONIC SUPPLEMENTARY MATERIAL Background Noise as a Selective Pressure: Stream-breeding Anurans  Call at Higher Frequencies'
+title: 'Supporting Information Background Noise as a Selective Pressure:
+  Stream-breeding Anurans  Call at Higher Frequencies'
 author: David Lucas Röhr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Juncá; Adrian
   A. Garda;
 date: "April, 2015"
-output: pdf_document
-toc: true
-theme: "united"
+output: word_document
+theme: united
+toc: yes
 ---
 
 ***
@@ -374,6 +375,12 @@ _Figure S5: Regression plots for three anura families (Hylidae, Ranidae, Bufonid
 5. Freckleton, R. P., Harvey, P. H., & Pagel, M. (2002). Phylogenetic analysis and comparative data: a test and review of evidence. The American Naturalist, 160(6), 712-726.
 
 6. Freckleton, R. P. (2009). The seven deadly sins of comparative analysis. Journal of Evolutionary Biology, 22(7), 1367-1375.
+
+\newpage
+
+6. Source Code
+==============
+
 
 ***
 When using the __data available__ in this paper, please cite the original publication.  
