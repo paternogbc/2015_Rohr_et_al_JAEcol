@@ -1,11 +1,11 @@
 
 ---
-title: 'Supporting Information Background Noise as a Selective Pressure:
-  Stream-breeding Anurans  Call at Higher Frequencies'
+title: 'Supporting Information Background Noise as a Selective Pressure: Stream-breeding
+  Anurans  Call at Higher Frequencies'
 author: David Lucas Röhr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Juncá; Adrian
   A. Garda;
 date: "April, 2015"
-output: word_document
+output: pdf_document
 theme: united
 toc: yes
 ---
