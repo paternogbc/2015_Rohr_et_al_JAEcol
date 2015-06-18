@@ -1,17 +1,31 @@
 
 ---
-title: 'Supporting Information Background Noise as a Selective Pressure: Stream-breeding
-  Anurans  Call at Higher Frequencies'
-author: David Lucas Röhr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Juncá; Adrian
-  A. Garda;
-date: "April, 2015"
+title: 'supplementary material: Background Noise as a Selective Pressure: Stream-breeding Anurans  Call at Higher Frequencies'
+author: David Lucas Röhr^1^; Gustavo B. Paterno^1^; Felipe Camurugi^2^; Flora A. Juncá^3^; Adrian A. Garda^1^; 
+date: "Organisms Diversity & Evolution (2015) | 
+
+**1** Programa de Pós-graduação em Ecologia, Universidade Federal do Rio Grande do Norte, 
+Lagoa Nova, 59072–970, Natal, RN, Brazil.  |
+
+**2** Programa de Pós-Graduação em Ciências Biológicas (Zoologia), Departamento de 
+Sistemática e Ecologia, Centro de Ciências Exatas e da Natureza, Universidade Federal da 
+Paraíba, João Pessoa, 58059–900, PB, Brazil  |
+
+**3** Departamento de Ciências Biológicas, Universidade Estadual de Feira de Santana, BR 116, 
+Km 03, Campus Universitário, 44031–460, Feira de Santana, Bahia, Brazil.  |
+
+**Corresponding author:** (davidlucasr@yahoo.com.br)
+"
 output: pdf_document
 theme: united
 toc: yes
 ---
 
 ***
->This doccument follows the principles of reproducible research (Peng, 2011). All Data and code required to repeat the analysis bellow are linked at [Github](https://github.com/paternogbc/2015_Rohr_et_al_JAEcol). To dowanload the __source code__ used to generate all figures, tables and analysis in the paper, please see: [source code](https://github.com/paternogbc/2015_Rohr_et_al_JAEcol/blob/master/R/source_code.R). This documment was generated in __R studio__ with `kintr` package.
+
+>This doccument follows the principles of reproducible research (Peng, 2011). All Data and code required to repeat the analysis bellow are linked at [Github](https://github.com/paternogbc/2015_Rohr_et_al_JAEcol). To dowanload the __source code__ used to generate all figures, tables and analysis in the paper, please see: [source code](https://github.com/paternogbc/2015_Rohr_et_al_JAEcol/blob/master/R/source_code.R). This documment was generated in __R studio__ with `kintr` package. 
+
+*** 
 
 \newpage
 
@@ -386,9 +400,9 @@ _Figure S5: Regression plots for three anura families (Hylidae, Ranidae, Bufonid
 #################################################################################
 ### Background Noise as a Selective Pressure: Stream-breeding Anurans  Call at 
 ### Higher Frequencies for Phylogenetic Analysis of Pitches in Anura 
-### Journal of Animal Ecology (2015)
+### Organisms Diversity & Evolution (2015)
 ### Authors: David Lucas Röhr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Juncâ;
-### Adrian A. Garda;  
+### Adrian A. Garda; 
 ### last updade: 12.05.15
 #################################################################################
 
@@ -557,7 +571,6 @@ g.fam3 <- ggplot(mat, aes(y=logDF,x=logSVL))+
              label = c("p = 0.005 (environment)","N = 161"))
     
 grid.arrange(g.fam3,g.fam2,g.fam1,ncol=2)
-
 ```
 
 
