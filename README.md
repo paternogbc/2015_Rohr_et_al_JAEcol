@@ -1,4 +1,4 @@
-# 2015_Rohr_et_al_JAE  
+# 2015_Rohr_et_al
 
 __Supporting Information Background Noise as a Selective Pressure: Stream-breeding
   Anurans  Call at Higher Frequencies__
