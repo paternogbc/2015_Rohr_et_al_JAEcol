@@ -18,5 +18,7 @@ _David Lucas Röhr; Gustavo B. Paterno; Felipe Camurugi; Flora A. Juncá; Adrian
     
 ***
 When using the __data available__ in this paper, please cite the original publication.  
-Contact davidlucasr@yahoo.com.br for any further information. 
+Contact davidlucasr@yahoo.com.br for any further information.  
+
+* This repository follows the principles of reproducible research ([Peng, 2011](http://www.sciencemag.org/content/334/6060/1226)).
  
